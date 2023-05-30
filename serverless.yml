@@ -1,0 +1,68 @@
+service: app-product
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  region: 'sa-east-1'
+  runtime: nodejs18.x
+  iam:
+    role:
+      name: regra-dynamodb-product1
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:PutItem
+            - dynamodb:GetItem
+            - dynamodb:UpdateItem
+            - dynamodb:Scan
+          Resource:            
+            - arn:aws:dynamodb:sa-east-1:194183587259:table/Products
+        
+
+functions:
+  productList:
+    handler: src/product-list.productList
+    events:
+      - http:
+          path: /products
+          method: get
+          
+  productInsert:
+    handler: src/product-insert.productInsert
+    events:
+      - http:
+          path: /product
+          method: post
+          
+  productGet:
+    handler: src/product-get.productGet
+    events:
+      - http:
+          path: /product/{id}
+          method: get
+
+  productUpdate:
+    handler: src/product-update.productUpdate
+    events:
+      - http:
+          path: /product/{id}
+          method: post
+
+
+          
+resources:
+  Resources:
+    TableProducts:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Products
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S          
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH          
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

@@ -10,6 +10,8 @@
 - [x] NodeJS 18.x
 - [x] Serverless
 - [x] Aws-sdk
+- [x] AWS Cloud Formation 
+- [x] AWS Api Gateway
 - [x] AWS Lambda
 - [X] AWS DynamoDB
 
